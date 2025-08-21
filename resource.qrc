@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Main.qml</file>
+        <file>Meiryo-01.ttf</file>
+    </qresource>
+</RCC>
