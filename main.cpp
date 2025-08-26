@@ -17,10 +17,5 @@ int main(int argc, char *argv[])
                      }, Qt::QueuedConnection);
     engine.load(url);
 
-    //日本語フォント
-    QFont font = a.font();
-    font.setFamily(QFontDatabase::applicationFontFamilies(QFontDatabase::addApplicationFont(":/Meiryo-01.ttf")).at(0));
-    a.setFont(font);
-
     return a.exec();
 }
