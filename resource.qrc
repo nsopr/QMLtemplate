@@ -1,5 +1,8 @@
 <RCC>
     <qresource prefix="/">
         <file>Main.qml</file>
+        <file>List.qml</file>
+        <file>Editor.qml</file>
+        <file>Dlg.qml</file>
     </qresource>
 </RCC>

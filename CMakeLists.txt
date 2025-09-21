@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(QMLtemplate VERSION 0.1 LANGUAGES CXX)
+project(QML_NSbb VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -9,8 +9,8 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Qml)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Qml)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Qml Network)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Qml Network)
 
 set(PROJECT_SOURCES
         main.cpp
@@ -20,39 +20,48 @@ set(PROJECT_SOURCES
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(QMLtemplate
+    find_package(Qt6 REQUIRED COMPONENTS Core)
+find_package(Qt6 REQUIRED COMPONENTS Core)
+
+    qt_add_executable(QML_NSbb
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         resource.qrc
         Main.qml
+        firebase.h firebase.cpp
+        emsdk.h emsdk.cpp
+        network.h network.cpp
+        dropbox.h dropbox.cpp
     )
 # Define target properties for Android with Qt 6 as:
-#    set_property(TARGET QMLtemplate APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
+#    set_property(TARGET QML_NSbb APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
 #                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
 # For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
 else()
     if(ANDROID)
-        add_library(QMLtemplate SHARED
+        add_library(QML_NSbb SHARED
             ${PROJECT_SOURCES}
         )
 # Define properties for Android with Qt 5 after find_package() calls as:
 #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else()
-        add_executable(QMLtemplate
+        add_executable(QML_NSbb
             ${PROJECT_SOURCES}
         )
     endif()
 endif()
 
-target_link_libraries(QMLtemplate PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt6::Qml)
+target_link_libraries(QML_NSbb PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt6::Qml)
+target_link_libraries(QML_NSbb PRIVATE Qt6::Core Qt6::Network)
+target_link_libraries(QML_NSbb PRIVATE Qt6::Core)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
 # explicit, fixed bundle identifier manually though.
 if(${QT_VERSION} VERSION_LESS 6.1.0)
-  set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.QMLtemplate)
+  set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.QML_NSbb)
 endif()
-set_target_properties(QMLtemplate PROPERTIES
+set_target_properties(QML_NSbb PROPERTIES
     ${BUNDLE_ID_OPTION}
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
@@ -61,12 +70,12 @@ set_target_properties(QMLtemplate PROPERTIES
 )
 
 include(GNUInstallDirs)
-install(TARGETS QMLtemplate
+install(TARGETS QML_NSbb
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
 if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(QMLtemplate)
+    qt_finalize_executable(QML_NSbb)
 endif()
